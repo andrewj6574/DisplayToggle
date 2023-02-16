@@ -2,10 +2,11 @@
 //
 
 #include <iostream>
+#include <string>
 #include <Windows.h>
 #include <vector>
 
-void ToggleDisplay()
+void ToggleDisplay(int monitor)
 {
    DWORD           DispNum = 0;
    DISPLAY_DEVICE  DisplayDevice;
@@ -17,7 +18,7 @@ void ToggleDisplay()
    ZeroMemory(&DisplayDevice, sizeof(DisplayDevice));
    DisplayDevice.cb = sizeof(DisplayDevice);
 
-   std::wstring monitorToToggle(L"\\\\.\\DISPLAY3");
+   std::wstring monitorToToggle = (L"\\\\.\\DISPLAY") + std::to_wstring(monitor);
 
    // get all display devices
    while (EnumDisplayDevices(NULL, DispNum, &DisplayDevice, 0))
@@ -69,7 +70,7 @@ int main()
    hWnd = FindWindowA("ConsoleWindowClass", NULL);
    ShowWindow(hWnd, 0);
 
-   ToggleDisplay();
+   ToggleDisplay(3);
 
    return 0;
 }
