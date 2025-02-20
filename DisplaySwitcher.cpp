@@ -47,7 +47,7 @@ void StartSoundProcess()
    CloseHandle(pi.hProcess);
 }
 
-void ToggleDisplay(int monitor)
+void ToggleDisplay(int monitor, int resolutionWidth, int resolutionHeight)
 {
    DWORD           DispNum = 0;
    DISPLAY_DEVICE  DisplayDevice;
@@ -88,10 +88,10 @@ void ToggleDisplay(int monitor)
             ZeroMemory(&DevMode, sizeof(DevMode));
             DevMode.dmSize = sizeof(DevMode);
             DevMode.dmFields = DM_PELSWIDTH | DM_PELSHEIGHT;
-            //DevMode.dmPelsWidth = 3840;
-            //DevMode.dmPelsHeight = 2160;
-            ChangeDisplaySettingsEx((LPCWSTR)DisplayDevice.DeviceName, &DevMode, NULL, CDS_UPDATEREGISTRY | CDS_NORESET, NULL);
-            ChangeDisplaySettingsEx(NULL, NULL, NULL, 0, NULL);
+            DevMode.dmPelsWidth = resolutionWidth;
+            DevMode.dmPelsHeight = resolutionHeight;
+            auto ret = ChangeDisplaySettingsEx((LPCWSTR)DisplayDevice.DeviceName, &DevMode, NULL, CDS_UPDATEREGISTRY | CDS_NORESET, NULL);
+            auto ret2 = ChangeDisplaySettingsEx(NULL, NULL, NULL, 0, NULL);
 
             //int result = system("control mmsys.cpl,,0");
             StartSoundProcess();
@@ -116,7 +116,9 @@ int main()
 
    //StartProcess("control mmsys.cpl");
 
-   ToggleDisplay(3);
+   int width = 3840;
+   int height = 2160;
+   ToggleDisplay(5, width, height);
 
    return 0;
 }
